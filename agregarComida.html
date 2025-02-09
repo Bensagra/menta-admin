@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #0f1e13;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -29,10 +29,34 @@
             max-width: 200px;
             margin-top: 10px;
         }
+        #back-button {
+    background: #ff5722;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width: auto;
+}
+#back-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+
     </style>
 </head>
 <body>
+    <button id="back-button" onclick="goBack()">
+        ⬅ Volver
+    </button>
     <div class="container">
+       
         <h1>Agregar Nueva Comida</h1>
         <form id="food-form">
             <label for="name">Nombre:</label>
@@ -55,13 +79,11 @@
         </form>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const categories = [
-                { "id": 1, "name": "Cafeteria" },
-                { "id": 2, "name": "De especialidad" },
-                { "id": 3, "name": "Smoothies" },
-                { "id": 4, "name": "Frappes & milkshakes" }
-            ];
+        document.addEventListener("DOMContentLoaded",async function() {
+            const categories =await fetch("https://menta-backend.vercel.app/food")
+                .then(response => response.json())
+                .then(data => data.data);
+                console.log(categories);
             const categorySelect = document.getElementById("category");
             
             categories.forEach(category => {
@@ -116,6 +138,11 @@
                 }
             });
         });
+
+function goBack() {
+    window.location.href = "admin.html";
+}
+
     </script>
 </body>
 </html>
