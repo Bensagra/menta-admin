@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargar Nueva Comida</title>
+    <link rel="stylesheet" href="agregarComida.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        label, input, select, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        img {
+            max-width: 200px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Agregar Nueva Comida</h1>
+        <form id="food-form">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" required>
+            
+            <label for="description">Descripción:</label>
+            <input type="text" id="description" required>
+            
+            <label for="price">Precio:</label>
+            <input type="number" id="price" required>
+            
+            <label for="category">Categoría:</label>
+            <select id="category" required></select>
+            
+            <label for="image">Imagen:</label>
+            <input type="file" id="image" accept="image/*">
+            <img id="preview" src="" alt="Vista previa" style="display:none;">
+            
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded",async function() {
+            let categories = await fetch("https://menta-backend.vercel.app/food")
+                .then(response => response.json())
+                .then(data => data.data);
+                console.log(categories)
+            
+            const categorySelect = document.getElementById("category");
+            
+            categories.forEach(category => {
+                let option = document.createElement("option");
+                option.value = category.id;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+            });
+            
+            document.getElementById("image").addEventListener("change", function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById("preview").src = e.target.result;
+                        document.getElementById("preview").style.display = "block";
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
