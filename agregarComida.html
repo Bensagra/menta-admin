@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cargar Nueva Comida</title>
-    <link rel="stylesheet" href="agregarComida.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,12 +55,13 @@
         </form>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded",async function() {
-            let categories = await fetch("https://menta-backend.vercel.app/food")
-                .then(response => response.json())
-                .then(data => data.data);
-                console.log(categories)
-            
+        document.addEventListener("DOMContentLoaded", function() {
+            const categories = [
+                { "id": 1, "name": "Cafeteria" },
+                { "id": 2, "name": "De especialidad" },
+                { "id": 3, "name": "Smoothies" },
+                { "id": 4, "name": "Frappes & milkshakes" }
+            ];
             const categorySelect = document.getElementById("category");
             
             categories.forEach(category => {
@@ -79,6 +80,39 @@
                         document.getElementById("preview").style.display = "block";
                     }
                     reader.readAsDataURL(file);
+                }
+            });
+
+            document.getElementById("food-form").addEventListener("submit", async function(event) {
+                event.preventDefault();
+                
+                const formData = new FormData();
+                formData.append("name", document.getElementById("name").value);
+                formData.append("description", document.getElementById("description").value);
+                formData.append("price", document.getElementById("price").value);
+                formData.append("categoryId", document.getElementById("category").value);
+                
+                const imageFile = document.getElementById("image").files[0];
+                if (imageFile) {
+                    formData.append("image", imageFile);
+                }
+                
+                try {
+                    const response = await fetch("https://menta-backend.vercel.app/food", {
+                        method: "POST",
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        alert("Comida agregada exitosamente");
+                        document.getElementById("food-form").reset();
+                        document.getElementById("preview").style.display = "none";
+                    } else {
+                        alert("Error al agregar comida");
+                    }
+                } catch (error) {
+                    alert("Hubo un problema al enviar los datos");
+                    console.error(error);
                 }
             });
         });
