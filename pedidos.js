@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                             <img src="${item.food.image}" alt="${item.food.name}">
                             <div class="order-details">
                                 <p><strong>${item.food.name}</strong></p>
-                                <p>${item.food.description}</p>
+                               
                                 <p><strong>Cantidad:</strong> ${item.quantity}</p>
                                 <p><strong>Precio:</strong> $${item.price}</p>
                             </div>
@@ -74,7 +74,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <hr>
                 <p class="order-total"><strong>Total:</strong> $${order.total}</p>
                 <a href="${whatsappLink}" target="_blank" class="whatsapp-icon">
-                    <img src="whatsapp-icon.png" alt="WhatsApp">
+                                    <button>Contactar por Whatsapp</button>
+
                 </a>
                 <div class="order-actions">
                     <button class="confirm-button" data-id="${order.id}">✅ Confirmar</button>
