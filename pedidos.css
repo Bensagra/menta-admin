@@ -4,14 +4,15 @@
     box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
-
 body {
     background-color: #0f1e13;
+    background-image: url('fondo-hojas.png'); /* Usa tu imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    padding: 20px;
 }
 
 #orders-container {

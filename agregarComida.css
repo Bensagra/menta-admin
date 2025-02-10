@@ -1,13 +1,12 @@
-/* Estilos generales */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #0f1e13;
+    background-image: url('fondo-hojas.png'); /* Usa tu imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    flex-direction: column;
-    margin: 0;
 }
 
 /* Botón de volver */

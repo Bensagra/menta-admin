@@ -60,6 +60,8 @@
             border-radius: 5px;
             margin-top: 5px;
             display: flex;
+            width: 100%;
+            justify-content: space-around;
             align-items: center;
             gap: 10px;
             cursor: pointer;
@@ -218,7 +220,7 @@
                 div.classList.add("food-item");
                 div.addEventListener("click", () => fillFormWithFood(foodItem, categoryId));
                 div.innerHTML = `<img src="${foodItem.image}" alt="${foodItem.name}">
-                                <div>
+                                <div style="width: 65%;">
                                     <strong>${foodItem.name}</strong>
                                     <p>${foodItem.description}</p>
                                     <p>Precio: $${foodItem.price}</p>
