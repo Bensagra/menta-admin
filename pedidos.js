@@ -1,3 +1,8 @@
+if (sessionStorage.getItem("user") === null) {
+    window.location.href = "index.html";
+    
+}
+
 document.addEventListener("DOMContentLoaded", async function () {
     const ordersContainer = document.getElementById("orders-container");
     ordersContainer.innerHTML = `<p class="loading-message">🔄 Cargando pedidos...</p>`;

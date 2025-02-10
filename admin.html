@@ -86,8 +86,14 @@
         <a href="./pedidosConfirmados.html" style="text-decoration-line: none;"><button class="button confirmados">Pedidos confirmados</button></a>
         <a href="./agregarComida.html" style="text-decoration-line: none;"><button class="button agregar">Agregar comida</button></a>
         <button class="button balance">Balance</button>
-        <button class="button cerrar">Cerrar sesion</button>
+        <button class="button cerrar" id="cerrar">Cerrar sesion</button>
     </div>
     <script src="admin.js"></script>
+    <script>
+        document.getElementById('cerrar').addEventListener('click', () => {
+            sessionStorage.removeItem('user');
+            window.location.href = './index.html';
+        });
+    </script>
 </body>
 </html>
