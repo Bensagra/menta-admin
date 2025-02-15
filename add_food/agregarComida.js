@@ -1,137 +1,5 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cargar Nueva Comida</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0f1e13;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            position: relative;
-        }
-        label, input, select, button {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        img {
-            max-width: 100%;
-            margin-top: 10px;
-        }
-        #back-button {
-            background: #ff5722;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-size: 16px;
-            cursor: pointer;
-            width: auto;
-        }
-        #back-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-        }
-        #modify-section {
-            display: none;
-        }
-        .food-item {
-            background: #f8f8f8;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 5px;
-            display: flex;
-            width: 100%;
-            justify-content: space-around;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .food-item:hover {
-            background: #e0e0e0;
-        }
-        .food-item img {
-            width: 60px;
-            height: 60px;
-            border-radius: 5px;
-            object-fit: cover;
-        }
-        #food-list {
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        @media (max-width: 500px) {
-            .container {
-                width: 90%;
-            }
-        }
-    </style>
-</head>
-<body>
-    <button id="back-button" onclick="goBack()">⬅ Volver</button>
-
-    <div class="container">
-        <h1>Gestión de Comidas</h1>
-
-        <div id="add-section">
-            <form id="food-form">
-                <label for="name">Nombre:</label>
-                <input type="text" id="name" required>
-                
-                <label for="description">Descripción:</label>
-                <input type="text" id="description" required>
-                
-                <label for="price">Precio:</label>
-                <input type="number" id="price" required>
-                
-                <label for="category">Categoría:</label>
-                <select id="category" required></select>
-                
-                <label for="image">Imagen:</label>
-                <input type="file" id="image" accept="image/*">
-                <img id="preview" src="" alt="Vista previa" style="display:none;">
-                
-                <button type="submit" id="add-food">Agregar comida</button>
-                <button type="button" id="modify-food" style="display:none;">Modificar comida</button>
-                <button type="button" id="delete-food" style="display:none;">Eliminar comida</button>
-                <button type="button" id="modify-button">Modificar o eliminar una comida</button>
-            </form>
-        </div>
-
-        <div id="modify-section">
-            <label for="modify-category">Selecciona una categoría:</label>
-            <select id="modify-category"></select>
-            <div id="food-list"></div>
-            <button type="button" id="back-to-add">Volver a agregar comida</button>
-        </div>
-    </div>
-
-    <script>
-        if (sessionStorage.getItem("user") === null) {
-    window.location.href = "index.html";
+if (sessionStorage.getItem("user") === null) {
+    window.location.href = "../index.html";
     
 }
     let categories = [];
@@ -156,7 +24,7 @@
     });
 
     function goBack() {
-        window.location.href = "admin.html";
+        window.location.href = "../home/admin.html";
     }
 
     document.getElementById("food-form").addEventListener("submit", async function(event) {
@@ -339,7 +207,3 @@ function loadFoodData(foodItem) {
         document.getElementById("add-section").style.display = "block";
         document.getElementById("modify-section").style.display = "none";
     }
-</script>
-
-</body>
-</html>

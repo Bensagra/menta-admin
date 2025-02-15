@@ -14,7 +14,7 @@ button.addEventListener('click', async()=> {
     
     if (data.status === 200 && await response.user.role === 'ADMIN') {
         sessionStorage.setItem('user', JSON.stringify(response.user));
-        window.location.href = './admin.html';
+        window.location.href = './home/admin.html';
     }
     if (data.status === 200 && await response.user.role != 'ADMIN') {
         alert('Your user its not an admin');

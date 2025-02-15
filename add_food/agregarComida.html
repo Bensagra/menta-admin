@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargar Nueva Comida</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="agregarComida.css">
+</head>
+<body>
+    <button id="back-button" onclick="goBack()">⬅ Volver</button>
+
+    <div class="container">
+        <h1>Gestión de Comidas</h1>
+
+        <div id="add-section">
+            <form id="food-form">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" required>
+                
+                <label for="description">Descripción:</label>
+                <input type="text" id="description" required>
+                
+                <label for="price">Precio:</label>
+                <input type="number" id="price" required>
+                
+                <label for="category">Categoría:</label>
+                <select id="category" required></select>
+                
+                <label for="image">Imagen:</label>
+                <input type="file" id="image" accept="image/*">
+                <img id="preview" src="" alt="Vista previa" style="display:none;">
+                
+                <button type="submit" id="add-food">Agregar comida</button>
+                <button type="button" id="modify-food" style="display:none;">Modificar comida</button>
+                <button type="button" id="delete-food" style="display:none;">Eliminar comida</button>
+                <button type="button" id="modify-button">Modificar o eliminar una comida</button>
+            </form>
+        </div>
+
+        <div id="modify-section">
+            <label for="modify-category">Selecciona una categoría:</label>
+            <select id="modify-category"></select>
+            <div id="food-list"></div>
+            <button type="button" id="back-to-add">Volver a agregar comida</button>
+        </div>
+    </div>
+
+   <script src="agregarComida.js"></script>
+
+</body>
+</html>
