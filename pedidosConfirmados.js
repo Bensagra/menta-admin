@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         document.querySelectorAll(".confirm-button").forEach(button => {
             button.addEventListener("click", function () {
-                handleAction(this, "Delivered");
+                handleAction(this, "DELIVERED");
             });
         });
 
