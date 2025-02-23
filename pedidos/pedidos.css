@@ -18,6 +18,9 @@ body {
 #orders-container {
     width: 100%;
     max-width: 450px;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
 }
 
 .order-card {
