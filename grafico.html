@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Balance de Pedidos - Última Semana</title>
+  <title>Ganancias Diarias y Ventas</title>
   <!-- Incluimos Chart.js desde CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -17,12 +17,12 @@
       margin: 0;
     }
     h1 {
-      margin-bottom: 20px;
       color: #333;
+      margin-bottom: 20px;
     }
     #chartContainer {
       width: 100%;
-      max-width: 900px;
+      max-width: 800px;
       background: #fff;
       padding: 20px;
       border-radius: 10px;
@@ -35,102 +35,69 @@
   </style>
 </head>
 <body>
-  <h1>Balance y Cantidad de Pedidos (Última Semana)</h1>
+  <h1>Ganancias Diarias y Ventas</h1>
   <div id="chartContainer">
-    <canvas id="balanceChart" width="900" height="450"></canvas>
+    <canvas id="dailyChart"></canvas>
   </div>
   <script>
-    // URL del endpoint (ajusta la URL según tu entorno)
+    // URL del endpoint que devuelve la data agrupada (ajusta la URL según corresponda)
     const endpoint = 'https://menta-backend.vercel.app/order/balance';
 
     fetch(endpoint)
       .then(response => response.json())
       .then(data => {
         if (data.valid && data.data && data.data.length > 0) {
-          // Ordenamos los datos por fecha para mayor coherencia
+          // Ordenamos los datos por fecha
           const sortedData = data.data.sort((a, b) => new Date(a.day) - new Date(b.day));
-          // Extraemos las etiquetas (días), la cantidad y el balance
+          // Extraemos etiquetas, cantidad de ventas y ganancias
           const labels = sortedData.map(item => item.day);
           const quantities = sortedData.map(item => item.quantity);
           const balances = sortedData.map(item => item.balance);
-
-          const ctx = document.getElementById('balanceChart').getContext('2d');
+          
+          const ctx = document.getElementById('dailyChart').getContext('2d');
           const chart = new Chart(ctx, {
+            type: 'bar',
             data: {
               labels: labels,
-              datasets: [
-                {
-                  type: 'bar',
-                  label: 'Cantidad de Pedidos',
-                  data: quantities,
-                  backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                  borderColor: 'rgba(54, 162, 235, 1)',
-                  borderWidth: 1,
-                  yAxisID: 'y1'
-                },
-                {
-                  type: 'line',
-                  label: 'Balance Total',
-                  data: balances,
-                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                  borderColor: 'rgba(255, 99, 132, 1)',
-                  borderWidth: 2,
-                  fill: true,
-                  tension: 0.3,
-                  yAxisID: 'y2'
-                }
-              ]
+              datasets: [{
+                label: 'Ganancias',
+                data: balances,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+              }]
             },
             options: {
               responsive: true,
               plugins: {
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const index = context.dataIndex;
+                      return [
+                        'Ganancias: $' + balances[index],
+                        'Ventas: ' + quantities[index]
+                      ];
+                    }
+                  }
+                },
                 title: {
                   display: true,
-                  text: 'Balance y Cantidad de Pedidos (última semana)',
+                  text: 'Ganancias Diarias y Ventas',
                   font: {
                     size: 18
                   }
                 },
-                tooltip: {
-                  mode: 'index',
-                  intersect: false,
-                },
                 legend: {
-                  position: 'top',
+                  display: false
                 }
               },
-              interaction: {
-                mode: 'index',
-                intersect: false,
-              },
               scales: {
-                y1: {
-                  type: 'linear',
-                  position: 'left',
+                y: {
+                  beginAtZero: true,
                   title: {
                     display: true,
-                    text: 'Cantidad de Pedidos'
-                  },
-                  ticks: {
-                    beginAtZero: true
-                  },
-                  grid: {
-                    drawOnChartArea: true,
-                    color: 'rgba(54, 162, 235, 0.2)'
-                  }
-                },
-                y2: {
-                  type: 'linear',
-                  position: 'right',
-                  title: {
-                    display: true,
-                    text: 'Balance Total'
-                  },
-                  ticks: {
-                    beginAtZero: true
-                  },
-                  grid: {
-                    drawOnChartArea: false
+                    text: 'Ganancias ($)'
                   }
                 },
                 x: {
