@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Balance de Pedidos - Última Semana</title>
+  <!-- Incluimos Chart.js desde CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: #f4f4f4;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    #chartContainer {
+      width: 100%;
+      max-width: 900px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+  </style>
+</head>
+<body>
+  <h1>Balance y Cantidad de Pedidos (Última Semana)</h1>
+  <div id="chartContainer">
+    <canvas id="balanceChart" width="900" height="450"></canvas>
+  </div>
+  <script>
+    // URL del endpoint (ajusta la URL según tu entorno)
+    const endpoint = 'https://menta-backend.vercel.app/order/balance';
+
+    fetch(endpoint)
+      .then(response => response.json())
+      .then(data => {
+        if (data.valid && data.data && data.data.length > 0) {
+          // Ordenamos los datos por fecha para mayor coherencia
+          const sortedData = data.data.sort((a, b) => new Date(a.day) - new Date(b.day));
+          // Extraemos las etiquetas (días), la cantidad y el balance
+          const labels = sortedData.map(item => item.day);
+          const quantities = sortedData.map(item => item.quantity);
+          const balances = sortedData.map(item => item.balance);
+
+          const ctx = document.getElementById('balanceChart').getContext('2d');
+          const chart = new Chart(ctx, {
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  type: 'bar',
+                  label: 'Cantidad de Pedidos',
+                  data: quantities,
+                  backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1,
+                  yAxisID: 'y1'
+                },
+                {
+                  type: 'line',
+                  label: 'Balance Total',
+                  data: balances,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 2,
+                  fill: true,
+                  tension: 0.3,
+                  yAxisID: 'y2'
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Balance y Cantidad de Pedidos (última semana)',
+                  font: {
+                    size: 18
+                  }
+                },
+                tooltip: {
+                  mode: 'index',
+                  intersect: false,
+                },
+                legend: {
+                  position: 'top',
+                }
+              },
+              interaction: {
+                mode: 'index',
+                intersect: false,
+              },
+              scales: {
+                y1: {
+                  type: 'linear',
+                  position: 'left',
+                  title: {
+                    display: true,
+                    text: 'Cantidad de Pedidos'
+                  },
+                  ticks: {
+                    beginAtZero: true
+                  },
+                  grid: {
+                    drawOnChartArea: true,
+                    color: 'rgba(54, 162, 235, 0.2)'
+                  }
+                },
+                y2: {
+                  type: 'linear',
+                  position: 'right',
+                  title: {
+                    display: true,
+                    text: 'Balance Total'
+                  },
+                  ticks: {
+                    beginAtZero: true
+                  },
+                  grid: {
+                    drawOnChartArea: false
+                  }
+                },
+                x: {
+                  title: {
+                    display: true,
+                    text: 'Día'
+                  }
+                }
+              }
+            }
+          });
+        } else {
+          document.body.innerHTML = "<p>No hay datos disponibles para mostrar.</p>";
+        }
+      })
+      .catch(error => {
+        console.error("Error al obtener los datos:", error);
+        document.body.innerHTML = "<p>Error al obtener los datos del servidor.</p>";
+      });
+  </script>
+</body>
+</html>
