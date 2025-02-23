@@ -2,8 +2,11 @@ if (sessionStorage.getItem("user") === null) {
     window.location.href = "../index.html";
     
 }
-
+function mostrarPopUp(notes) {
+    alert(notes);
+  }
 document.addEventListener("DOMContentLoaded", async function () {
+ 
     const ordersContainer = document.getElementById("orders-container");
     ordersContainer.innerHTML = `<p class="loading-message">🔄 Cargando pedidos...</p>`;
 
@@ -56,6 +59,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             let phoneNumber = order.user.phone.replace(/\D/g, ""); // Solo deja números
             let whatsappLink = `https://wa.me/${phoneNumber}`;
             card.innerHTML = `
+            <div>
                 <div class="order-header">
                     <h2>Orden #${order.number}</h2>
                     <span class="order-status" style="background-color: ${statusColor};">${order.status}</span>
@@ -63,6 +67,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <p><strong>Cliente:</strong> ${order.user.name} ${order.user.surname}</p>
                 <p><strong>Horario de Pedido:</strong> ${createdAt}</p>
                 <p><strong>Horario de Entrega:</strong> ${deliveryTime}</p>
+                </div>
                 <div class="order-items">
                     ${order.food_pedido.map(item => `
                         <div class="order-item">
@@ -78,10 +83,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                 </div>
                 <hr>
                 <p class="order-total"><strong>Total:</strong> $${order.total}</p>
+                <div class="order-actions">
                 <a href="${whatsappLink}" target="_blank" class="whatsapp-icon">
                                     <button>Contactar por Whatsapp</button>
 
                 </a>
+                 <button class="order-button" id="order-button" onClick="mostrarPopUp('${order.notes}')">Notas</button>
+                 </div>
                 <div class="order-actions">
                     <button class="confirm-button" data-id="${order.id}">✅ Confirmar</button>
                     <button class="cancel-button" data-id="${order.id}">❌ Cancelar</button>
@@ -89,7 +97,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             `;
 
             ordersContainer.appendChild(card);
+            
         });
+        
 
         // Event listener para los botones
         document.querySelectorAll(".confirm-button").forEach(button => {

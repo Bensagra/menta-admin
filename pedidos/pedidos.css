@@ -54,6 +54,9 @@ p {
 
 .order-items {
     margin-top: 10px;
+    overflow: auto;
+    max-height: 50vh;
+    height: 50vh;
 }
 
 .order-item {
