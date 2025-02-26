@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 </a>
                  <button class="order-button" id="order-button" onClick="mostrarPopUp('${order.notes}')">Notas</button>
+                 <button class="order-button" id="order-button" onClick="mostrarPopUp('${order.address}')">Modificar</button>
                  </div>
                 <div class="order-actions">
                     <button class="confirm-button" data-id="${order.id}">✅ Confirmar</button>
