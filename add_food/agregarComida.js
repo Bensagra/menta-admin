@@ -63,6 +63,7 @@ if (sessionStorage.getItem("userId") === null) {
     document.getElementById("modify-button").addEventListener("click", function() {
         document.getElementById("add-section").style.display = "none";
         document.getElementById("modify-section").style.display = "block";
+        cargarCatgorias();
     });
 
     document.getElementById("back-to-add").addEventListener("click", function() {
@@ -77,6 +78,11 @@ if (sessionStorage.getItem("userId") === null) {
     });
 
     document.getElementById("modify-category").addEventListener("change", function() {
+        cargarCatgorias();
+    });
+
+
+    const cargarCatgorias = async () => {
         const categoryId = this.value;
         const foodListDiv = document.getElementById("food-list");
         foodListDiv.innerHTML = "";
@@ -96,7 +102,7 @@ if (sessionStorage.getItem("userId") === null) {
                 foodListDiv.appendChild(div);
             });
         }
-    });
+    }
 
     document.getElementById("delete-food").addEventListener("click", async function() {
         const categoryId = document.getElementById("category").value;
