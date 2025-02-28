@@ -83,7 +83,8 @@ if (sessionStorage.getItem("userId") === null) {
 
 
     const cargarCatgorias = async () => {
-        const categoryId = this.value;
+        console.log("Cargando categorias");
+        const categoryId = document.getElementById("modify-category").value;
         const foodListDiv = document.getElementById("food-list");
         foodListDiv.innerHTML = "";
 
