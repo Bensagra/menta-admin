@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId: JSON.parse(sessionStorage.getItem('user')).id }),
+            body: JSON.stringify({ userId: JSON.parse(sessionStorage.getItem('userId')) }),
         });
 
         const apiResponse = await response.json();
