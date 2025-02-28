@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modificar Pedido</title>
+  <style>
+    /* ------------------------------------------------------
+       RESET BÁSICO
+    ------------------------------------------------------ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* ------------------------------------------------------
+       ESTILOS DE LA PANTALLA
+    ------------------------------------------------------ */
+    body {
+      background: #1f2d2b url('./assets/fondo-hojas.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .back-button:hover {
+      opacity: 0.8;
+    }
+
+    .back-button svg {
+      width: 24px;
+      height: 24px;
+      margin-right: 0.5rem;
+      fill: currentColor;
+    }
+
+    /* Contenedor principal */
+    .container {
+      width: 90%;
+      max-width: 480px;
+      margin: 0 auto;
+      flex: 1; 
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Título principal */
+    .page-title {
+      text-align: center;
+      margin: 1rem 0;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    /* Tarjeta principal */
+    .order-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Sección de formulario (hora, notas, estado) */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+
+    /* Tabla de items */
+    table {
+      width: 100%;
+      margin-top: 1rem;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.5rem;
+    }
+    thead {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    tbody tr {
+      background: rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.5rem;
+    }
+    tbody tr + tr {
+      margin-top: 0.5rem;
+    }
+    .order-item-row td {
+      vertical-align: middle;
+    }
+
+    /* Botón para actualizar */
+    .update-order-btn {
+      background: #41735a;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.3s ease;
+    }
+    .update-order-btn:hover {
+      background: #2e5843;
+    }
+
+    /* Sección de categorías (para agregar items) */
+    .categories-title {
+      margin-top: 1rem;
+      font-weight: bold;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+    .card {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .card-header {
+      font-weight: 600;
+      padding: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Para acomodar el ícono a la derecha */
+      cursor: pointer; /* Para indicar que se puede hacer clic */
+    }
+    .card-header img {
+      margin-right: 0.5rem;
+    }
+    .card-body {
+      padding: 0.75rem;
+      display: none; /* Por defecto, oculto */
+    }
+    .food-card {
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .food-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .food-card img {
+      width: 100%;
+      border-radius: 5px;
+      margin-bottom: 0.5rem;
+    }
+    .food-card .card-title {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+    .food-card .card-text {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Flecha para indicar desplegable */
+    .accordion-arrow {
+      transition: transform 0.3s ease;
+    }
+    /* Rotación cuando se expande */
+    .accordion-arrow.expanded {
+      transform: rotate(90deg);
+    }
+
+    /* Responsive */
+    @media (min-width: 768px) {
+      .page-title {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado con botón de volver -->
+  <header class="header">
+    <button class="back-button" onclick="window.history.back()">
+      <svg viewBox="0 0 24 24">
+        <path d="M15.41 16.58L10.83 12l4.58-4.58L14 6l-6 6 6 6z"/>
+      </svg>
+      Volver
+    </button>
+  </header>
+
+  <!-- Contenedor principal -->
+  <div class="container">
+    <h2 class="page-title">Modificar Pedido</h2>
+
+    <!-- Tarjeta que contiene el formulario y la tabla de items -->
+    <div class="order-card">
+      <!-- Formulario para editar hora, notas y estado -->
+      <div class="form-group">
+        <label for="orderHour">Hora</label>
+        <input type="datetime-local" id="orderHour" required />
+      </div>
+      <div class="form-group">
+        <label for="orderNotes">Notas</label>
+        <textarea id="orderNotes" rows="2"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="orderStatus">Estado</label>
+        <select id="orderStatus">
+          <option value="PENDING">PENDIENTE</option>
+          <option value="IN_PROGRESS">EN PROGRESO</option>
+          <option value="COMPLETED">COMPLETADO</option>
+          <option value="CANCELLED">CANCELADO</option>
+        </select>
+      </div>
+
+      <!-- Tabla de items del pedido -->
+      <table id="orderItemsTable">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cant.</th>
+            <th>Total</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Se llena dinámicamente con JS -->
+        </tbody>
+      </table>
+
+      <!-- Botón para actualizar el pedido -->
+      <button class="update-order-btn" id="updateOrderBtn">
+        Actualizar Pedido
+      </button>
+    </div>
+
+    <!-- Sección para agregar items al pedido -->
+    <h3 class="categories-title">Agregar Productos</h3>
+    <div id="categoriesContainer">
+      <!-- Se llena dinámicamente con JS -->
+    </div>
+  </div>
+
+  <script>
+    let categories = [];
+
+    /* -----------------------------------------------------
+       DATOS SIMULADOS
+       (En tu proyecto, vendrán del backend)
+    ----------------------------------------------------- */
+    let order = {}
+
+
+    /* -----------------------------------------------------
+       FUNCIONES PARA RENDERIZAR Y ACTUALIZAR
+    ----------------------------------------------------- */
+
+    // Renderiza los items del pedido en la tabla
+    function renderOrderItems() {
+      const tbody = document.querySelector("#orderItemsTable tbody");
+      tbody.innerHTML = '';
+      order.food_pedido.forEach((item, index) => {
+        const row = document.createElement("tr");
+        row.classList.add("order-item-row");
+        row.innerHTML = `
+          <td>${item.food.name}</td>
+          <td>$${item.food.price}</td>
+          <td>
+            <input 
+              type="number" 
+              min="1" 
+              value="${item.quantity}" 
+              style="width:60px;" 
+              onchange="updateItemQuantity(${index}, this.value)"
+            />
+          </td>
+          <td id="item-total-${index}">$${item.food.price * item.quantity}</td>
+          <td>
+            <button 
+              style="background:#d9534f; color:#fff; border:none; padding:0.4rem 0.6rem; border-radius:4px; cursor:pointer;"
+              onclick="removeOrderItem(${index})"
+            >
+              Eliminar
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Actualiza la cantidad de un item y recalcula el total
+    function updateItemQuantity(index, newQuantity) {
+      newQuantity = parseInt(newQuantity);
+      if(newQuantity < 1) return;
+      order.food_pedido[index].quantity = newQuantity;
+      document.getElementById(`item-total-${index}`).innerText = 
+        '$' + (order.food_pedido[index].food.price * newQuantity);
+    }
+
+    // Elimina un item del pedido
+    function removeOrderItem(index) {
+      order.food_pedido.splice(index, 1);
+      renderOrderItems();
+    }
+
+    // Agrega una comida al pedido (si ya existe, incrementa la cantidad)
+    function addFoodToOrder(foodId, foodName, foodPrice) {
+      const existing = order.food_pedido.find(item => item.food.id === foodId);
+      if(existing) {
+        existing.quantity += 1;
+      } else {
+        order.food_pedido.push({
+          food: { id: foodId, name: foodName, price: foodPrice },
+          foodId: foodId,
+          quantity: 1,
+          price: foodPrice
+        });
+      }
+      renderOrderItems();
+    }
+
+    // Envía los cambios al endpoint de actualización
+    async function updateOrder() {
+      const updatedHourValue = document.getElementById("orderHour").value;
+      // Convertir a formato ISO (opcional, según requiera tu backend)
+      const updatedHour = new Date(updatedHourValue).toISOString();
+      const updatedNotes = document.getElementById("orderNotes").value;
+      const updatedStatus = document.getElementById("orderStatus").value;
+
+      // Construir payload
+      const payload = {
+        orderId: order.id,
+        hour: updatedHour,
+        notes: updatedNotes,
+        status: updatedStatus,
+        userId: sessionStorage.getItem("userId"),  // Ajusta según tu lógica
+        order: order.food_pedido.map(item => ({
+          id: item.food.id,
+          quantity: item.quantity,
+          price: item.food.price
+        }))
+      };
+
+      console.log("Enviando payload:", payload);
+
+      try {
+        const response = await fetch("https://menta-backend.vercel.app/order/update", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          alert("Pedido actualizado correctamente");
+          // Aquí podrías recargar la página o navegar a otra vista
+        } else {
+          const errorResult = await response.json();
+          console.error("Error al actualizar:", errorResult);
+          alert("Error al actualizar el pedido: " + (errorResult.message || JSON.stringify(errorResult)));
+        }
+      } catch (error) {
+        console.error("Error de red:", error);
+        alert("Error de red al actualizar el pedido");
+      }
+    }
+
+    /* -----------------------------------------------------
+       Lógica de categorías con desplegables
+    ----------------------------------------------------- */
+    // Alterna la visibilidad del contenido de una categoría
+    function toggleCategory(categoryId) {
+      const bodyEl = document.getElementById(`category-body-${categoryId}`);
+      const arrowEl = document.getElementById(`arrow-${categoryId}`);
+      if (bodyEl.style.display === "none") {
+        bodyEl.style.display = "block";
+        arrowEl.classList.add("expanded");
+      } else {
+        bodyEl.style.display = "none";
+        arrowEl.classList.remove("expanded");
+      }
+    }
+
+    // Renderiza las categorías y sus comidas como desplegables
+    function renderCategories() {
+      const container = document.getElementById("categoriesContainer");
+      container.innerHTML = '';
+
+      categories.forEach(category => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+
+        // Cabecera con el nombre y la flecha
+        const cardHeader = document.createElement("div");
+        cardHeader.classList.add("card-header");
+        cardHeader.setAttribute("onclick", `toggleCategory(${category.id})`);
+        cardHeader.innerHTML = `
+          <div style="display:flex; align-items:center;">
+            <img src="${category.img}" alt="${category.name}" style="width:30px; height:30px; margin-right:10px;">
+            ${category.name}
+          </div>
+          <!-- Flecha para indicar expandir/colapsar -->
+          <span id="arrow-${category.id}" class="accordion-arrow">▶</span>
+        `;
+
+        // Cuerpo de la categoría (oculto por defecto)
+        const cardBody = document.createElement("div");
+        cardBody.classList.add("card-body");
+        cardBody.id = `category-body-${category.id}`;
+        cardBody.style.display = "none";
+
+        // Contenedor interno para las comidas
+        const row = document.createElement("div");
+        row.style.cssText = "display: flex; flex-wrap: wrap;";
+
+        // Si no hay comidas, mensaje
+        if (!category.food || category.food.length === 0) {
+          row.innerHTML = `<div style="padding:0.5rem;">No hay comidas disponibles</div>`;
+        } else {
+          category.food.forEach(food => {
+            const foodCard = document.createElement("div");
+            foodCard.style.cssText = "width:48%; margin:1%; cursor:pointer;";
+            foodCard.classList.add("food-card");
+            foodCard.innerHTML = `
+              <img src="${food.image}" alt="${food.name}">
+              <h5 class="card-title">${food.name}</h5>
+              <p class="card-text">$${food.price}</p>
+            `;
+            foodCard.onclick = () => addFoodToOrder(food.id, food.name, food.price);
+            row.appendChild(foodCard);
+          });
+        }
+
+        // Insertar elementos en el DOM
+        cardBody.appendChild(row);
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        container.appendChild(card);
+      });
+    }
+
+    // Obtiene las categorías del backend
+    const getCategoryData = async () => {
+      try {
+        const response = await fetch("https://menta-backend.vercel.app/food");
+        if (response.ok) {
+          categories = await response.json();
+          categories = categories.data;
+          console.log("Categorías obtenidas:", categories);
+        } else {
+          console.error("Error al obtener categorías:", response.statusText);
+          categories = [];
+        }
+      } catch (error) {
+        console.error("Error de red al obtener categorías:", error);
+        categories = [];
+      }
+    };
+
+    // Inicializa los campos del formulario y renderiza la UI
+    async function initForm() {
+        let orderId = sessionStorage.getItem("orderId");
+        order = await fetch(`https://menta-backend.vercel.app/order?id=${orderId}`).then(res => res.json());
+        order = order.data;
+      console.log("Pedido obtenido:", order);
+      // Ajusta el valor del input datetime-local
+      const isoDate = new Date(order.hour).toISOString().slice(0,16);
+      document.getElementById("orderHour").value = isoDate;
+      document.getElementById("orderNotes").value = order.notes || "";
+      document.getElementById("orderStatus").value = order.status;
+
+      renderOrderItems();
+      await getCategoryData();
+      renderCategories();
+    }
+
+    // Asignar evento al botón de actualizar
+    document.getElementById("updateOrderBtn").addEventListener("click", updateOrder);
+
+    // Llamar initForm al cargar la ventana
+    window.onload = initForm;
+  </script>
+</body>
+</html>

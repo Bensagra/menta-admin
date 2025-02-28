@@ -1,4 +1,4 @@
-if (sessionStorage.getItem("user") === null) {
+if (sessionStorage.getItem("userId") === null) {
     window.location.href = "../index.html";
     
 }
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId: JSON.parse(sessionStorage.getItem('user')).id }),
+            body: JSON.stringify({ userId: JSON.parse(sessionStorage.getItem('userId')) }),
         });
 
         const apiResponse = await response.json();
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 </a>
                  <button class="order-button" id="order-button" onClick="mostrarPopUp('${order.notes}')">Notas</button>
-                 <button class="order-button" id="order-button" onClick="mostrarPopUp('${order.address}')">Modificar</button>
+                 <button class="order-button" id="order-button" onClick="modificarPedido('${order.id}')">Modificar</button>
                  </div>
                 <div class="order-actions">
                     <button class="confirm-button" data-id="${order.id}">✅ Confirmar</button>
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             
         });
         
-
+       
         // Event listener para los botones
         document.querySelectorAll(".confirm-button").forEach(button => {
             button.addEventListener("click", function () {
@@ -150,4 +150,9 @@ async function handleAction(button, action) {
 // Función para volver a admin.html
 function goBack() {
     window.location.href = "../home/admin.html";
+}
+
+let modificarPedido = (id) => {
+    sessionStorage.setItem('orderId', id);
+    window.location.href = '../modificar_Pedido.html';
 }

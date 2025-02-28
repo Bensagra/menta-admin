@@ -1,4 +1,4 @@
-if (sessionStorage.getItem("user") === null) {
+if (sessionStorage.getItem("userId") === null) {
     window.location.href = "../index.html";
     
 }

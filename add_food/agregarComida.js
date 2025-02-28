@@ -1,4 +1,4 @@
-if (sessionStorage.getItem("user") === null) {
+if (sessionStorage.getItem("userId") === null) {
     window.location.href = "../index.html";
     
 }
@@ -8,7 +8,7 @@ if (sessionStorage.getItem("user") === null) {
         categories = await fetch("https://menta-backend.vercel.app/food")
             .then(response => response.json())
             .then(data => data.data);
-        
+        console.log(categories);
         const categorySelect = document.getElementById("category");
         const modifyCategorySelect = document.getElementById("modify-category");
 

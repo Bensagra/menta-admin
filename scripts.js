@@ -13,7 +13,7 @@ button.addEventListener('click', async()=> {
     console.log(response);
     
     if (data.status === 200 && await response.user.role === 'ADMIN') {
-        sessionStorage.setItem('user', JSON.stringify(response.user));
+        sessionStorage.setItem('userId', JSON.stringify(response.user.id));
         window.location.href = './home/admin.html';
     }
     if (data.status === 200 && await response.user.role != 'ADMIN') {
