@@ -104,7 +104,7 @@ async function handleAction(button, action) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ orderId: button.dataset.id, status: action, userId: JSON.parse(sessionStorage.getItem('user')).id }),
+            body: JSON.stringify({ orderId: button.dataset.id, status: action, userId: JSON.parse(sessionStorage.getItem('userId')) }),
         });
 
         if (data.status === 200) {
