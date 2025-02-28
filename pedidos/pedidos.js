@@ -154,5 +154,5 @@ function goBack() {
 
 let modificarPedido = (id) => {
     sessionStorage.setItem('orderId', id);
-    window.location.href = '../modificar_Pedido.html';
+    window.location.href = '../modificar_pedido.html';
 }
