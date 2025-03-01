@@ -57,10 +57,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                 day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" 
             });
 
+
             // Nota: Se asume que el campo de entrega es "deliveryTime"
             let deliveryTime = new Date(order.deliveryTime).toLocaleString("es-ES", { 
                 day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" 
             });
+
+            console.log(deliveryTime, order.deliveryTime);
             
             let phoneNumber = order.user.phone.replace(/\D/g, ""); // Solo deja números
             let whatsappLink = `https://wa.me/${phoneNumber}`;
