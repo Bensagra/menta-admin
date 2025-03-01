@@ -59,11 +59,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
             // Nota: Se asume que el campo de entrega es "deliveryTime"
-            let deliveryTime = new Date(order.deliveryTime).toLocaleString("es-ES", { 
+            let deliveryTime = new Date(order.hour).toLocaleString("es-ES", { 
                 day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" 
             });
 
-            console.log(deliveryTime, order.deliveryTime);
             
             let phoneNumber = order.user.phone.replace(/\D/g, ""); // Solo deja números
             let whatsappLink = `https://wa.me/${phoneNumber}`;
@@ -212,7 +211,7 @@ setInterval(async () => {
                 });
 
                 // Asegúrate de usar el campo correcto (aquí se usa deliveryTime)
-                let deliveryTime = new Date(order.deliveryTime).toLocaleString("es-ES", { 
+                let deliveryTime = new Date(order.hour).toLocaleString("es-ES", { 
                     day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" 
                 });
 
