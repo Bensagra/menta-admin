@@ -276,7 +276,7 @@ setInterval(async () => {
             oscillator.start();
             setTimeout(() => {
                 oscillator.stop();
-            }, 200); // Pitido de 200ms
+            }, 600); // Pitido de 200ms
         }
 
         // Agregar los event listeners a los botones (se pueden aplicar a todos)
