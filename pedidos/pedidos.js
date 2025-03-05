@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             
             let phoneNumber = order.user.phone.replace(/\D/g, ""); // Solo deja números
             let whatsappLink = `https://wa.me/${phoneNumber}`;
-            let place = order.local === true ? "Come en el local" : "To go";
+            let place = order.local === true ? "Come en el local" : "Para llevar";
             card.innerHTML = `
             <div>
                 <div class="order-header">
