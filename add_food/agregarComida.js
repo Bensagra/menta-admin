@@ -1,134 +1,131 @@
 if (sessionStorage.getItem("userId") === null) {
     window.location.href = "../index.html";
-    
 }
-    let categories = [];
 
-    document.addEventListener("DOMContentLoaded", async function() {
-        categories = await fetch("https://menta-backend.vercel.app/food")
-            .then(response => response.json())
-            .then(data => data.data);
-        console.log(categories);
-        const categorySelect = document.getElementById("category");
-        const modifyCategorySelect = document.getElementById("modify-category");
+let categories = [];
 
-        categories.forEach(category => {
-            let option = document.createElement("option");
-            option.value = category.id;
-            option.textContent = category.name;
-            categorySelect.appendChild(option);
+document.addEventListener("DOMContentLoaded", async function() {
+    categories = await fetch("https://menta-backend.vercel.app/food")
+        .then(response => response.json())
+        .then(data => data.data);
+    console.log(categories);
+    const categorySelect = document.getElementById("category");
+    const modifyCategorySelect = document.getElementById("modify-category");
 
-            let modifyOption = option.cloneNode(true);
-            modifyCategorySelect.appendChild(modifyOption);
-        });
+    categories.forEach(category => {
+        let option = document.createElement("option");
+        option.value = category.id;
+        option.textContent = category.name;
+        categorySelect.appendChild(option);
+
+        let modifyOption = option.cloneNode(true);
+        modifyCategorySelect.appendChild(modifyOption);
     });
+});
 
-    function goBack() {
-        window.location.href = "../home/admin.html";
+function goBack() {
+    window.location.href = "../home/admin.html";
+}
+
+document.getElementById("food-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    
+    const formData = new FormData();
+    formData.append("name", document.getElementById("name").value);
+    formData.append("description", document.getElementById("description").value);
+    formData.append("price", document.getElementById("price").value);
+    formData.append("categoryId", document.getElementById("category").value);
+    
+    const imageFile = document.getElementById("image").files[0];
+    if (imageFile) {
+        formData.append("image", imageFile);
     }
-
-    document.getElementById("food-form").addEventListener("submit", async function(event) {
-        event.preventDefault();
+    
+    try {
+        const response = await fetch("https://menta-backend.vercel.app/food", {
+            method: "POST",
+            body: formData
+        });
         
-        const formData = new FormData();
-        formData.append("name", document.getElementById("name").value);
-        formData.append("description", document.getElementById("description").value);
-        formData.append("price", document.getElementById("price").value);
-        formData.append("categoryId", document.getElementById("category").value);
-        
-        const imageFile = document.getElementById("image").files[0];
-        if (imageFile) {
-            formData.append("image", imageFile);
+        if (response.ok) {
+            alert("Comida agregada exitosamente");
+            document.getElementById("food-form").reset();
+            document.getElementById("preview").style.display = "none";
+        } else {
+            alert("Error al agregar comida");
         }
-        
+    } catch (error) {
+        alert("Hubo un problema al enviar los datos");
+        console.error(error);
+    }
+});
+
+document.getElementById("modify-button").addEventListener("click", function() {
+    document.getElementById("add-section").style.display = "none";
+    document.getElementById("modify-section").style.display = "block";
+    cargarCatgorias();
+});
+
+document.getElementById("back-to-add").addEventListener("click", function() {
+    document.getElementById("add-food").style.display = "block";
+    document.getElementById("add-section").style.display = "block";
+    document.getElementById("modify-section").style.display = "none";
+    document.getElementById("modify-food").style.display = "none";
+    document.getElementById("delete-food").style.display = "none";
+    document.getElementById("food-form").reset();
+    document.getElementById("preview").style.display = "none";
+});
+
+document.getElementById("modify-category").addEventListener("change", function() {
+    cargarCatgorias();
+});
+
+const cargarCatgorias = async () => {
+    console.log("Cargando categorias");
+    const categoryId = document.getElementById("modify-category").value;
+    const foodListDiv = document.getElementById("food-list");
+    foodListDiv.innerHTML = "";
+
+    const selectedCategory = categories.find(cat => cat.id == categoryId);
+    if (selectedCategory && selectedCategory.food) {
+        selectedCategory.food.forEach(foodItem => {
+            let div = document.createElement("div");
+            div.classList.add("food-item");
+            div.addEventListener("click", () => fillFormWithFood(foodItem, categoryId));
+            div.innerHTML = `<img src="${foodItem.image}" alt="${foodItem.name}">
+                             <div style="width: 65%;">
+                                <strong>${foodItem.name}</strong>
+                                <p>${foodItem.description}</p>
+                                <p>Precio: $${foodItem.price}</p>
+                             </div>`;
+            foodListDiv.appendChild(div);
+        });
+    }
+};
+
+document.getElementById("delete-food").addEventListener("click", async function() {
+    const foodName = document.getElementById("name").value;
+    if (confirm(`¿Estás seguro de eliminar la comida ${foodName}?`)) {
         try {
-            const response = await fetch("https://menta-backend.vercel.app/food", {
-                method: "POST",
-                body: formData
+            const response = await fetch(`https://menta-backend.vercel.app/food?id=${sessionStorage.getItem("foodId")}`, {
+                method: "DELETE"
             });
             
             if (response.ok) {
-                alert("Comida agregada exitosamente");
+                alert("Comida eliminada exitosamente");
                 document.getElementById("food-form").reset();
                 document.getElementById("preview").style.display = "none";
             } else {
-                alert("Error al agregar comida");
+                alert("Error al eliminar comida");
             }
         } catch (error) {
             alert("Hubo un problema al enviar los datos");
             console.error(error);
         }
-    });
-
-    document.getElementById("modify-button").addEventListener("click", function() {
-        document.getElementById("add-section").style.display = "none";
-        document.getElementById("modify-section").style.display = "block";
-        cargarCatgorias();
-    });
-
-    document.getElementById("back-to-add").addEventListener("click", function() {
-        document.getElementById("add-food").style.display = "block";
-
-        document.getElementById("add-section").style.display = "block";
-        document.getElementById("modify-section").style.display = "none";
-        document.getElementById("modify-food").style.display = "none";
-        document.getElementById("delete-food").style.display = "none";
-        document.getElementById("food-form").reset();
-        document.getElementById("preview").style.display = "none";
-    });
-
-    document.getElementById("modify-category").addEventListener("change", function() {
-        cargarCatgorias();
-    });
-
-
-    const cargarCatgorias = async () => {
-        console.log("Cargando categorias");
-        const categoryId = document.getElementById("modify-category").value;
-        const foodListDiv = document.getElementById("food-list");
-        foodListDiv.innerHTML = "";
-
-        const selectedCategory = categories.find(cat => cat.id == categoryId);
-        if (selectedCategory && selectedCategory.food) {
-            selectedCategory.food.forEach(foodItem => {
-                let div = document.createElement("div");
-                div.classList.add("food-item");
-                div.addEventListener("click", () => fillFormWithFood(foodItem, categoryId));
-                div.innerHTML = `<img src="${foodItem.image}" alt="${foodItem.name}">
-                                <div style="width: 65%;">
-                                    <strong>${foodItem.name}</strong>
-                                    <p>${foodItem.description}</p>
-                                    <p>Precio: $${foodItem.price}</p>
-                                </div>`;
-                foodListDiv.appendChild(div);
-            });
-        }
     }
+});
 
-    document.getElementById("delete-food").addEventListener("click", async function() {
-        const categoryId = document.getElementById("category").value;
-        const foodName = document.getElementById("name").value;
-        if (confirm(`¿Estás seguro de eliminar la comida ${foodName}?`)) {
-            try {
-                const response = await fetch(`https://menta-backend.vercel.app/food?id=${sessionStorage.getItem("foodId")}`, {
-                    method: "DELETE"
-                });
-                
-                if (response.ok) {
-                    alert("Comida eliminada exitosamente");
-                    document.getElementById("food-form").reset();
-                    document.getElementById("preview").style.display = "none";
-                } else {
-                    alert("Error al eliminar comida");
-                }
-            } catch (error) {
-                alert("Hubo un problema al enviar los datos");
-                console.error(error);
-            }
-        }
-    });
-
-    document.getElementById("modify-food").addEventListener("click", async function() {
+document.getElementById("modify-food").addEventListener("click", async function() {
     const foodId = sessionStorage.getItem("foodId");
     if (!foodId) {
         alert("No hay una comida seleccionada para modificar");
@@ -156,12 +153,12 @@ if (sessionStorage.getItem("userId") === null) {
         return;
     }
 
-console.log("Datos en FormData:");
-for (const pair of formData.entries()) {
-    console.log(pair[0], pair[1]);
-}
+    console.log("Datos en FormData:");
+    for (const pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+    }
     try {
-        const response = await fetch(`https://menta-backend.vercel.app/food`, {
+        const response = await fetch("https://menta-backend.vercel.app/food", {
             method: "PUT",
             body: formData
         });
@@ -197,20 +194,19 @@ function loadFoodData(foodItem) {
     }));
 }
 
-
-    function fillFormWithFood(foodItem, categoryId) {
-        sessionStorage.setItem("foodId",foodItem.id );
-        loadFoodData(foodItem);
-        document.getElementById("name").value = foodItem.name;
-        document.getElementById("description").value = foodItem.description;
-        document.getElementById("price").value = foodItem.price;
-        document.getElementById("category").value = categoryId;
-        document.getElementById("preview").src = foodItem.image;
-        document.getElementById("preview").style.display = "block";
-        document.getElementById("add-food").style.display = "none";
-        document.getElementById("modify-food").style.display = "block";
-        document.getElementById("delete-food").style.display = "block";
-        
-        document.getElementById("add-section").style.display = "block";
-        document.getElementById("modify-section").style.display = "none";
-    }
+function fillFormWithFood(foodItem, categoryId) {
+    sessionStorage.setItem("foodId", foodItem.id);
+    loadFoodData(foodItem);
+    document.getElementById("name").value = foodItem.name;
+    document.getElementById("description").value = foodItem.description;
+    document.getElementById("price").value = foodItem.price;
+    document.getElementById("category").value = categoryId;
+    document.getElementById("preview").src = foodItem.image;
+    document.getElementById("preview").style.display = "block";
+    document.getElementById("add-food").style.display = "none";
+    document.getElementById("modify-food").style.display = "block";
+    document.getElementById("delete-food").style.display = "block";
+    
+    document.getElementById("add-section").style.display = "block";
+    document.getElementById("modify-section").style.display = "none";
+}
