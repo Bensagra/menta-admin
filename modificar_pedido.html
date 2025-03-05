@@ -243,7 +243,10 @@
           <option value="CANCELLED">Cancelado</option>
         </select>
       </div>
-
+      <select name="local" id="local">
+        <option value="true">Come en el local</option>
+        <option value="false">Para llevar</option>
+      </select>
       <!-- Tabla de items del pedido -->
       <table id="orderItemsTable">
         <thead>
@@ -361,6 +364,7 @@
       // Construir payload
       const payload = {
         orderId: order.id,
+        local: document.getElementById("local").value === "true" ? true : false,
         hour: updatedHour,
         notes: updatedNotes,
         status: updatedStatus,
