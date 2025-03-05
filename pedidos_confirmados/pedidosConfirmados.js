@@ -49,11 +49,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             let phoneNumber = order.user.phone.replace(/\D/g, "");
             let whatsappLink = `https://wa.me/${phoneNumber}`;
+            let place = order.local === true ? "Come en el local" : "To go";
 
             card.innerHTML = `
                 <div class="order-header">
                     <h2>Orden #${order.number}</h2>
                     <span class="order-status" style="background-color: ${statusColor};">${order.status}</span>
+                                        <h3>${place}</h3>
+
                 </div>
                 <p><strong>Cliente:</strong> ${order.user.name} ${order.user.surname}</p>
                 <p><strong>Horario de Pedido:</strong> ${createdAt}</p>
