@@ -67,43 +67,45 @@ document.addEventListener("DOMContentLoaded", async function () {
             let phoneNumber = order.user.phone.replace(/\D/g, ""); // Solo deja números
             let whatsappLink = `https://wa.me/${phoneNumber}`;
             let place = order.local === true ? "Come en el local" : "Para llevar";
+            console.log(place);
             card.innerHTML = `
-            <div>
-                <div class="order-header">
-                    <h2>Orden #${order.number}</h2>
-                    <span class="order-status" style="background-color: ${statusColor};">${order.status}</span>
-                    <h3>${place}</h3>
-                </div>
-                <p><strong>Cliente:</strong> ${order.user.name} ${order.user.surname}</p>
-                <p><strong>Horario de Pedido:</strong> ${createdAt}</p>
-                <p><strong>Horario de Entrega:</strong> ${deliveryTime}</p>
-            </div>
-            <div class="order-items">
-                ${order.food_pedido.map(item => `
-                    <div class="order-item">
-                        <img src="${item.food.image}" alt="${item.food.name}">
-                        <div class="order-details">
-                            <p><strong>${item.food.name}</strong></p>
-                            <p><strong>Cantidad:</strong> ${item.quantity}</p>
-                            <p><strong>Precio:</strong> $${item.price}</p>
+             <div>
+                        <div class="order-header">
+                            <h2>Orden #${order.number}</h2>
+                            <span class="order-status" style="background-color: ${statusColor};">${order.status}</span>
                         </div>
+                        <p><strong>Cliente:</strong> ${order.user.name} ${order.user.surname}</p>
+                        <p><strong>Horario de Pedido:</strong> ${createdAt}</p>
+                        <p><strong>Horario de Entrega:</strong> ${deliveryTime}</p>
+                        <p><${place}</p>
+
                     </div>
-                `).join("")}
-            </div>
-            <hr>
-            <p class="order-total"><strong>Total:</strong> $${order.total}</p>
-            <div class="order-actions">
-                <a href="${whatsappLink}" target="_blank" class="whatsapp-icon">
-                    <button>Contactar por Whatsapp</button>
-                </a>
-                <button class="order-button" onClick="mostrarPopUp('${order.notes}')">Notas</button>
-                <button class="order-button" onClick="modificarPedido('${order.id}')">Modificar</button>
-            </div>
-            <div class="order-actions">
-                <button class="confirm-button" data-id="${order.id}">✅ Confirmar</button>
-                <button class="cancel-button" data-id="${order.id}">❌ Cancelar</button>
-            </div>
-            `;
+                    <div class="order-items">
+                        ${order.food_pedido.map(item => `
+                            <div class="order-item">
+                                <img src="${item.food.image}" alt="${item.food.name}">
+                                <div class="order-details">
+                                    <p><strong>${item.food.name}</strong></p>
+                                    <p><strong>Cantidad:</strong> ${item.quantity}</p>
+                                    <p><strong>Precio:</strong> $${item.price}</p>
+                                </div>
+                            </div>
+                        `).join("")}
+                    </div>
+                    <hr>
+                    <p class="order-total"><strong>Total:</strong> $${order.total}</p>
+                    <div><h3>Notas</h3><p>${order.notes}</p></div>
+                    <div class="order-actions">
+                        <a href="${whatsappLink}" target="_blank" class="whatsapp-icon">
+                            <button>Contactar por Whatsapp</button>
+                        </a>
+                        <button class="order-button" onClick="modificarPedido('${order.id}')">Modificar</button>
+                    </div>
+                    <div class="order-actions">
+                        <button class="confirm-button" data-id="${order.id}">✅ Confirmar</button>
+                        <button class="cancel-button" data-id="${order.id}">❌ Cancelar</button>
+                    </div>
+                `;
 
             ordersContainer.appendChild(card);
         });
@@ -218,6 +220,7 @@ setInterval(async () => {
 
                 let phoneNumber = order.user.phone.replace(/\D/g, ""); // Solo números
                 let whatsappLink = `https://wa.me/${phoneNumber}`;
+                const place = order.local === true ? "Come en el local" : "Para llevar";
 
                 card.innerHTML = `
                     <div>
@@ -225,6 +228,8 @@ setInterval(async () => {
                             <h2>Orden #${order.number}</h2>
                             <span class="order-status" style="background-color: ${statusColor};">${order.status}</span>
                         </div>
+                                                <p><${place}</p>
+
                         <p><strong>Cliente:</strong> ${order.user.name} ${order.user.surname}</p>
                         <p><strong>Horario de Pedido:</strong> ${createdAt}</p>
                         <p><strong>Horario de Entrega:</strong> ${deliveryTime}</p>
@@ -243,11 +248,11 @@ setInterval(async () => {
                     </div>
                     <hr>
                     <p class="order-total"><strong>Total:</strong> $${order.total}</p>
+                    <div><h3>Notas</h3><p>${order.notes}</p></div>
                     <div class="order-actions">
                         <a href="${whatsappLink}" target="_blank" class="whatsapp-icon">
                             <button>Contactar por Whatsapp</button>
                         </a>
-                        <button class="order-button" onClick="mostrarPopUp('${order.notes}')">Notas</button>
                         <button class="order-button" onClick="modificarPedido('${order.id}')">Modificar</button>
                     </div>
                     <div class="order-actions">
@@ -276,7 +281,7 @@ setInterval(async () => {
             oscillator.start();
             setTimeout(() => {
                 oscillator.stop();
-            }, 600); // Pitido de 200ms
+            }, 600); // 0.6 segundos
         }
 
         // Agregar los event listeners a los botones (se pueden aplicar a todos)
