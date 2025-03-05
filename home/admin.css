@@ -7,7 +7,7 @@
 
 body {
 background-color: #0f1e13;
-background-image: url('../assets/fondo-hojas.png'); /* Usa tu imagen de fondo */
+background-image: url('https://vljaisdvadywiyqrvryd.supabase.co/storage/v1/object/public/categories_images//fondo.png'); /* Usa tu imagen de fondo */
 background-size: cover;
 background-position: center;
 height: 100vh;
