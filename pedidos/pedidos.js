@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     </div>
                     <hr>
                     <p class="order-total"><strong>Total:</strong> $${order.total}</p>
-                    <div><h3>Notas</h3><p>${order.notes}</p></div>
+                    <div><h3>Notas</h3><p>${order.notes ? order.notes : "No se han encontrado notas"}</p></div>
                     <div class="order-actions">
                         <a href="${whatsappLink}" target="_blank" class="whatsapp-icon">
                             <button>Contactar por Whatsapp</button>
