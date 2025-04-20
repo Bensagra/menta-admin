@@ -30,7 +30,10 @@
         <label for="image">Imagen:</label>
         <input type="file" id="image" accept="image/*">
         <img id="preview" src="" alt="Vista previa" style="display:none;">
-                
+        <div style="margin-top: 10px;">
+          <label for="stock-switch">¿Hay stock?</label>
+          <input type="checkbox" id="stock-switch">
+        </div>
         <button type="submit" id="add-food">Agregar comida</button>
         <button type="button" id="modify-food" style="display:none;">Modificar comida</button>
         <button type="button" id="delete-food" style="display:none;">Eliminar comida</button>

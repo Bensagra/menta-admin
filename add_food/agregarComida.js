@@ -178,21 +178,24 @@ document.getElementById("modify-food").addEventListener("click", async function(
 
 // Función para cargar los datos originales al seleccionar una comida
 function loadFoodData(foodItem) {
-    document.getElementById("name").value = foodItem.name;
-    document.getElementById("description").value = foodItem.description;
-    document.getElementById("price").value = foodItem.price;
-    document.getElementById("category").value = foodItem.categoryId;
-    document.getElementById("preview").src = foodItem.image;
-    document.getElementById("preview").style.display = "block";
+        document.getElementById("name").value = foodItem.name;
+        document.getElementById("description").value = foodItem.description;
+        document.getElementById("price").value = foodItem.price;
+        document.getElementById("category").value = foodItem.categoryId;
+        document.getElementById("preview").src = foodItem.image;
+        document.getElementById("preview").style.display = "block";
+        document.getElementById("stock-switch").checked = foodItem.stock === true;
+    
+        sessionStorage.setItem("foodId", foodItem.id);
+        sessionStorage.setItem("originalFoodData", JSON.stringify({
+            name: foodItem.name,
+            description: foodItem.description,
+            price: foodItem.price,
+            categoryId: foodItem.categoryId,
+            stock: foodItem.stock
+        }));
+    }
 
-    sessionStorage.setItem("foodId", foodItem.id);
-    sessionStorage.setItem("originalFoodData", JSON.stringify({
-        name: foodItem.name,
-        description: foodItem.description,
-        price: foodItem.price,
-        categoryId: foodItem.categoryId
-    }));
-}
 
 function fillFormWithFood(foodItem, categoryId) {
     sessionStorage.setItem("foodId", foodItem.id);
@@ -210,3 +213,34 @@ function fillFormWithFood(foodItem, categoryId) {
     document.getElementById("add-section").style.display = "block";
     document.getElementById("modify-section").style.display = "none";
 }
+
+document.getElementById("stock-switch").addEventListener("change", async function() {
+    const foodId = sessionStorage.getItem("foodId");
+    if (!foodId) {
+        alert("No hay una comida seleccionada");
+        return;
+    }
+
+    try {
+        const response = await fetch("https://menta-backend.vercel.app/food/stock", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: parseInt(foodId),
+            })
+        });
+        console.log(await response.json());
+        console.log(foodId);
+
+        if (await response.ok) {
+            alert("Estado de stock actualizado correctamente");
+        } else {
+            alert("Error al actualizar el estado de stock");
+        }
+    } catch (error) {
+        alert("Hubo un problema al actualizar el stock");
+        console.error(error);
+    }
+});
