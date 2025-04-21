@@ -208,6 +208,9 @@
   </style>
 </head>
 <body>
+  <div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); z-index:9999; display:flex; justify-content:center; align-items:center;">
+    <div class="loader">Cargando...</div>
+  </div>
 
   <!-- Encabezado con botón de volver -->
   <header class="header">
@@ -276,6 +279,13 @@
   </div>
 
   <script>
+    function showLoading() {
+    document.getElementById("loadingOverlay").style.display = "flex";
+}
+
+function hideLoading() {
+    document.getElementById("loadingOverlay").style.display = "none";
+}
     let categories = [];
 
     /* -----------------------------------------------------
@@ -379,6 +389,7 @@
       console.log("Enviando payload:", payload);
 
       try {
+        showLoading();
         const response = await fetch("https://menta-backend.vercel.app/order/update", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -396,6 +407,9 @@
       } catch (error) {
         console.error("Error de red:", error);
         alert("Error de red al actualizar el pedido");
+      }
+      finally {
+        hideLoading();
       }
     }
 
@@ -476,6 +490,7 @@
     // Obtiene las categorías del backend
     const getCategoryData = async () => {
       try {
+        showLoading();
         const response = await fetch("https://menta-backend.vercel.app/food");
         if (response.ok) {
           categories = await response.json();
@@ -489,11 +504,15 @@
         console.error("Error de red al obtener categorías:", error);
         categories = [];
       }
+      finally {
+        hideLoading();
+      }
     };
 
     // Inicializa los campos del formulario y renderiza la UI
     async function initForm() {
         let orderId = sessionStorage.getItem("orderId");
+        
         order = await fetch(`https://menta-backend.vercel.app/order?id=${orderId}`).then(res => res.json());
         order = order.data;
       console.log("Pedido obtenido:", order);

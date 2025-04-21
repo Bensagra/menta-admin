@@ -5,9 +5,11 @@ if (sessionStorage.getItem("userId") === null) {
 let categories = [];
 
 document.addEventListener("DOMContentLoaded", async function() {
+    showLoading();
     categories = await fetch("https://menta-backend.vercel.app/food")
         .then(response => response.json())
         .then(data => data.data);
+    hideLoading();
     console.log(categories);
     const categorySelect = document.getElementById("category");
     const modifyCategorySelect = document.getElementById("modify-category");
@@ -42,6 +44,8 @@ document.getElementById("food-form").addEventListener("submit", async function(e
     }
     
     try {
+        showLoading();
+
         const response = await fetch("https://menta-backend.vercel.app/food", {
             method: "POST",
             body: formData
@@ -58,6 +62,7 @@ document.getElementById("food-form").addEventListener("submit", async function(e
         alert("Hubo un problema al enviar los datos");
         console.error(error);
     }
+    hideLoading();
 });
 
 document.getElementById("modify-button").addEventListener("click", function() {
@@ -102,11 +107,19 @@ const cargarCatgorias = async () => {
         });
     }
 };
+function showLoading() {
+    document.getElementById("loadingOverlay").style.display = "flex";
+}
+
+function hideLoading() {
+    document.getElementById("loadingOverlay").style.display = "none";
+}
 
 document.getElementById("delete-food").addEventListener("click", async function() {
     const foodName = document.getElementById("name").value;
     if (confirm(`¿Estás seguro de eliminar la comida ${foodName}?`)) {
         try {
+            showLoading();
             const response = await fetch(`https://menta-backend.vercel.app/food?id=${sessionStorage.getItem("foodId")}`, {
                 method: "DELETE"
             });
@@ -122,6 +135,7 @@ document.getElementById("delete-food").addEventListener("click", async function(
             alert("Hubo un problema al enviar los datos");
             console.error(error);
         }
+        hideLoading();
     }
 });
 
@@ -158,6 +172,8 @@ document.getElementById("modify-food").addEventListener("click", async function(
         console.log(pair[0], pair[1]);
     }
     try {
+        showLoading();
+
         const response = await fetch("https://menta-backend.vercel.app/food", {
             method: "PUT",
             body: formData
@@ -174,6 +190,7 @@ document.getElementById("modify-food").addEventListener("click", async function(
         alert("Hubo un problema al enviar los datos");
         console.error(error);
     }
+    hideLoading();
 });
 
 // Función para cargar los datos originales al seleccionar una comida
@@ -222,6 +239,8 @@ document.getElementById("stock-switch").addEventListener("change", async functio
     }
 
     try {
+        showLoading();
+
         const response = await fetch("https://menta-backend.vercel.app/food/stock", {
             method: "PUT",
             headers: {
@@ -243,4 +262,5 @@ document.getElementById("stock-switch").addEventListener("change", async functio
         alert("Hubo un problema al actualizar el stock");
         console.error(error);
     }
+    hideLoading();
 });
